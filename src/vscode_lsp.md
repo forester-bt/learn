@@ -4,35 +4,9 @@
 
 The Forester LSP provides language server support for the `.tree` language, delivered to VS Code through a thin client extension. The extension registers the `forester` language for `.tree` files, starts the LSP server over stdio, and surfaces highlighting, diagnostics, navigation, and formatting directly in the editor.
 
-## Requirements
-
-- Java 21+ (the language server is a Java application)
-
 ## Installation
 
-1. Build the language server launcher:
-
-   ```shell
-   ./gradlew installDist
-   ```
-
-   The launcher is written to `build/install/forester-lsp/bin`.
-
-2. From the `editors/vscode` folder, build and install the VS Code extension:
-
-   ```shell
-   npm install && npm run package && code --install-extension forester-lsp-client-0.0.1.vsix
-   ```
-
-   If the `code` command is not on your `PATH`, install the `.vsix` from the Extensions view: **...** menu → **Install from VSIX…**.
-
-3. Configure the server path (Settings → search "forester", or in `settings.json`):
-
-   ```json
-   "forester.server.path": "/path/to/forester-lsp/build/install/forester-lsp/bin/forester-lsp"
-   ```
-
-   A path ending in `.jar` is also accepted (run via `java -jar`).
+See the [VS Code extension](https://github.com/forester-bt/forester-lsp/tree/master/editors/vscode) in the Forester LSP repository for installation instructions.
 
 ## Features
 
@@ -63,3 +37,4 @@ Formats the document via the `Format Document` command.
 
 ## Links
 - [Repository](https://github.com/forester-bt/forester-lsp)
+- [VS Code extension](https://github.com/forester-bt/forester-lsp/tree/master/editors/vscode)
