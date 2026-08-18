@@ -34,6 +34,7 @@
 - [Examples](./f_examples.md)
 - [Tools](./tools.md)
   - [Intellij plugin](./intellij.md)
+  - [VSCode LSP](./vscode_lsp.md)
   - [Remote Action](./rem_action.md)
     - [Rust library for Remote Action](./rem_action_rs.md)
     - [Python library for Remote Action](./rem_action_py.md)

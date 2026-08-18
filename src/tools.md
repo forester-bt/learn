@@ -13,6 +13,17 @@ The [Forester IntelliJ Plugin](https://github.com/forester-bt/forester-intellij-
 * Structure view
 * Built-in tasks to visualize and simulate the tree directly from the IDE
 
+## VSCode LSP
+
+The [Forester LSP](https://github.com/forester-bt/forester-lsp) provides language server support for the `.tree` language in VS Code. Features include:
+* Syntax highlighting via LSP semantic tokens
+* Inline diagnostics (parse errors) via ANTLR4-based parsing
+* Completion (triggered on `"`, `/`, and `.`)
+* Go to definition and find references
+* Document symbols (outline / breadcrumbs)
+* Formatting
+* Comment toggling and bracket matching / auto-closing
+
 ## Remote Action Libraries
 
 Remote action clients allow you to decouple the orchestration engine from the execution of individual actions. This is particularly useful for AI agents where the orchestrator is in Rust, but the tool execution is in Python. Features include:
