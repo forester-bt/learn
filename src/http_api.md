@@ -6,6 +6,7 @@ The API is documented as an OpenAPI 3.1 specification using [`utoipa`](https://c
 
 * Programmatically via `forester_rs::runtime::forester::serv::ApiDoc::openapi()`.
 * At runtime via the `GET /openapi.json` endpoint of the running server.
+* The latest released specification is always available at [`https://forester-bt.github.io/forester/openapi.json`](https://forester-bt.github.io/forester/openapi.json).
 
 The full specification lives in the Forester repository: [HTTP API OpenAPI specification](https://github.com/forester-bt/forester/blob/main/docs/http-api.md).
 
