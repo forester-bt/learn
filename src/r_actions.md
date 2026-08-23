@@ -101,7 +101,7 @@ pub struct RemoteActionRequest {
 
 The remote server responds with a `TickResult` (`Success`, `Failure`, or `Running`).
 
-*See [Remote Action Clients](./rem_action.md) for how to implement the server side in Python or Rust.*
+*See [Remote Actions](./rem_action.md) for the request/response flow and the generated HTTP clients.*
 
 ---
 
