@@ -1,11 +1,9 @@
-use axum::extract::ConnectInfo;
-use axum::http::{HeaderMap, StatusCode};
+use axum::http::StatusCode;
 use axum::response::IntoResponse;
-use axum::routing::post;
-use axum::{routing::get, Json, Router, ServiceExt};
-use forester_http::client::{ForesterHttpClient, TickError};
-use forester_http::{ForesterRemoteAction, RemoteActionRequest, TickResult};
-use serde_json::{json, Value};
+use axum::routing::{get, post};
+use axum::{Json, Router};
+use forester_client_http::{ForesterClient, RemoteActionRequest, TickResult};
+use serde_json::json;
 use std::net::SocketAddr;
 use std::time::Duration;
 
@@ -15,7 +13,7 @@ async fn main() {
         .route("/", get(|| async { "OK" }))
         .route("/calculate", post(handler))
         .into_make_service();
-
+    println!("The server is starting on .10000");
     axum::Server::bind(&SocketAddr::from(([127, 0, 0, 1], 10000)))
         .serve(routing)
         .await
@@ -23,20 +21,16 @@ async fn main() {
 }
 
 async fn handler(Json(req): Json<RemoteActionRequest>) -> impl IntoResponse {
-    let client = ForesterHttpClient::new(req.serv_url.clone());
-    client
-        .put("calculated".to_string(), json!(true))
-        .await
-        .unwrap();
+    // The client talks back to the Forester HTTP server exposed at `serv_url`.
+    let client = ForesterClient::new(&req.serv_url).unwrap();
+    println!("serv_url:{}", req.serv_url);
+    client.put("calculated", json!(true)).await.unwrap();
 
-    client.lock("calculated".to_string()).await.unwrap();
+    client.lock("calculated").await.unwrap();
     tokio::time::sleep(Duration::from_millis(500)).await;
-    client.unlock("calculated".to_string()).await.unwrap();
+    client.unlock("calculated").await.unwrap();
 
-    client
-        .new_trace_event(req.tick, "Calculated".to_string())
-        .await
-        .unwrap();
-
-    (StatusCode::OK, Json::from(TickResult::Success))
+    client.trace("Calculated", req.tick).await.unwrap();
+    println!("the end");
+    (StatusCode::OK, Json(TickResult::Success))
 }

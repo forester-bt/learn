@@ -35,7 +35,7 @@ fn main() {
         RemoteHttpAction::new("http://localhost:10001/move_to".to_string()),
     );
 
-    fb.http_serv(9000);
+    fb.http_serv("127.0.0.1".to_string(), 9001);
 
     let mut forester = fb.build().unwrap();
 

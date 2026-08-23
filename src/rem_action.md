@@ -44,19 +44,33 @@ The remote endpoint answers with a `TickResult`, one of `"Success"`, `"Running"`
 
 ## Background operations via the generated client
 
-The remote action runs in the background against the Forester HTTP API. Instead of crafting the HTTP calls by hand, use a client generated from the OpenAPI specification (`GET /openapi.json`):
-
-* **Rust** — `forester-http` provides `ForesterHttpClient`.
-* **Python** — `forester-http-ra-py` provides `ForesterHttpClient`.
+The remote action runs in the background against the Forester HTTP API. Instead of crafting the HTTP calls by hand, use a client generated from the OpenAPI specification (`GET /openapi.json`). Both Rust and Python ship the same client as `forester-client-http`, exposing a `ForesterClient`.
 
 The client takes `serv_url` from the request and exposes typed helpers for the Blackboard and tracer:
 
 ```rust
-let client = ForesterHttpClient::new(req.serv_url);
-client.put("key", json!({ "f1": 1 })).await;      // write to the blackboard
-client.get("key").await;                          // read from the blackboard
-client.lock("key").await;                         // lock a blackboard entry
-client.print_trace().await;                       // fetch the tracer
+use forester_client_http::ForesterClient;
+
+let client = ForesterClient::new(&req.serv_url)?;
+
+client.put("key", json!({ "f1": 1 })).await?;   // write to the blackboard
+client.get("key").await?;                       // read from the blackboard
+client.lock("key").await?;                      // lock a blackboard entry
+client.trace("event", req.tick).await?;         // record a tracer event
+client.print_trace().await?;                    // fetch the tracer
+```
+
+The Python client mirrors the same API:
+
+```python
+from forester_client_http import ForesterClient
+
+client = ForesterClient(serv_url)
+client.put("key", {"f1": 1})   # write to the blackboard
+client.get("key")              # read from the blackboard
+client.lock("key")             # lock a blackboard entry
+client.trace("event", tick)    # record a tracer event
+client.print_trace()           # fetch the tracer
 ```
 
 See the [HTTP API](./http_api.md) page for the full list of endpoints and the [forester-examples](https://github.com/besok/forester-examples) repository for complete Rust and Python implementations.

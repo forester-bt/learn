@@ -1,39 +1,38 @@
-import asyncio
-import threading
+import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from forester_http.client import *
+from forester_client_http import ForesterClient
 
 hostName = "localhost"
 serverPort = 10001
 
 
 class MyServer(BaseHTTPRequestHandler):
-
     def do_POST(self):
         if self.path == "/move_to":
-            body = self.rfile.read(int(self.headers["Content-Length"]))
-            req = RemoteActionRequest.from_bytes(body)
+            content_length = int(self.headers["Content-Length"])
+            # The body is a RemoteActionRequest:
+            # {"tick": .., "args": [{"name": .., "value": ..}], "serv_url": ..}
+            body = json.loads(self.rfile.read(content_length))
+
+            tick = body["tick"]
+            serv_url = body["serv_url"]
 
             self.send_response(200)
             self.send_header("Content-Type", "application/json;charset=UTF-8")
             self.end_headers()
 
-            if req.tick == 5:
-                client = ForesterHttpClient(req.serv_url)
+            if tick == 5:
+                client = ForesterClient(serv_url)
                 client.put("calculated", False)
-                client.new_trace_event(req.tick, "Bump!. Recalculate")
+                client.trace("Bump!. Recalculate", tick)
 
-            if req.tick > 10:
+            if tick > 10:
                 self.wfile.write(json.dumps("Success").encode("utf-8"))
             else:
                 self.wfile.write(json.dumps("Running").encode("utf-8"))
-
         else:
             self.send_error(404)
-
-
-
 
 
 if __name__ == "__main__":

@@ -1,11 +1,9 @@
-use axum::extract::ConnectInfo;
-use axum::http::{HeaderMap, StatusCode};
+use axum::http::StatusCode;
 use axum::response::IntoResponse;
-use axum::routing::post;
-use axum::{routing::get, Json, Router, ServiceExt};
-use forester_http::client::{ForesterHttpClient, TickError};
-use forester_http::{ForesterRemoteAction, RemoteActionRequest, TickResult};
-use serde_json::{json, Value};
+use axum::routing::{get, post};
+use axum::{Json, Router};
+use forester_client_http::{ForesterClient, RemoteActionRequest, TickResult};
+use serde_json::json;
 use std::net::SocketAddr;
 
 #[tokio::main]
@@ -20,45 +18,23 @@ async fn main() {
         .await
         .unwrap();
 }
+
 async fn handler(Json(req): Json<RemoteActionRequest>) -> impl IntoResponse {
-    let url = req.clone().serv_url;
+    // The client talks back to the Forester HTTP server exposed at `serv_url`.
+    let client = ForesterClient::new(&req.serv_url).unwrap();
 
-    let client = ForesterHttpClient::new(url);
-    let trace = client
-        .print_trace()
+    // Write to the blackboard.
+    client
+        .put("test", json!({"f1": 1, "f2": 2, "f3": 3}))
         .await
-        .unwrap()
-        .text()
-        .await
-        .unwrap_or_default();
+        .unwrap();
 
-    println!("trace is {}", trace);
+    // Read it back.
+    let value = client.get("test").await.unwrap();
+    println!("blackboard['test'] = {value:?}");
 
-    let result = client
-        .put("test".to_string(), json!({"f1":1, "f2":2, "f3":3}))
-        .await;
-    let result2 = client.put("tt".to_string(), json!("OK")).await;
-    println!("result of putting {:?}", result);
+    // Record an event in the tracer.
+    client.trace("simple action executed", req.tick).await.unwrap();
 
-    let result = client
-        .get("test".to_string())
-        .await
-        .unwrap()
-        .json::<Value>()
-        .await
-        .unwrap_or_default();
-
-    println!("result of getting {:?}", result);
-
-    client.lock("test".to_string()).await.unwrap();
-
-    (StatusCode::OK, Json::from(RemoteAction.tick(req)))
-}
-
-struct RemoteAction;
-
-impl ForesterRemoteAction for RemoteAction {
-    fn tick(&self, request: RemoteActionRequest) -> TickResult {
-        TickResult::Success
-    }
+    (StatusCode::OK, Json(TickResult::Success))
 }

@@ -8,7 +8,7 @@ homepage = "https://github.com/besok/forester-examples"
 repository = "https://github.com/besok/forester-examples"
 
 [dependencies]
-forester-rs = {path = "../../../../forester", version = "0.2.3"}
+forester-rs = "0.6.0"
 log = "0.4"
 env_logger = "0.10.0"
 tokio = { version = "1.29.1", features = ["full"] }
