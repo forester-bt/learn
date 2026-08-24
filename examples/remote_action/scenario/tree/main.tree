@@ -5,7 +5,7 @@ impl calculate(guard:string);
 
 root main
     if_else(
-        test = test("calculated"),
+        test = test(calculated),
         then = move_to("calculated"),
         else = calculate_path()
     )

@@ -9,12 +9,14 @@ serverPort = 10001
 
 class MyServer(BaseHTTPRequestHandler):
     def do_POST(self):
+
         if self.path == "/move_to":
             content_length = int(self.headers["Content-Length"])
             # The body is a RemoteActionRequest:
             # {"tick": .., "args": [{"name": .., "value": ..}], "serv_url": ..}
             body = json.loads(self.rfile.read(content_length))
 
+            print(f"receive = {body}")
             tick = body["tick"]
             serv_url = body["serv_url"]
 
@@ -32,6 +34,7 @@ class MyServer(BaseHTTPRequestHandler):
             else:
                 self.wfile.write(json.dumps("Running").encode("utf-8"))
         else:
+            print("error 404")
             self.send_error(404)
 
 
