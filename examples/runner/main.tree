@@ -1,0 +1,16 @@
+import "std::actions"
+
+
+root main fallback {
+    r_sequence {
+        check_obstacle()
+        go_forward()
+        running()
+    }
+    stop()
+}
+
+
+impl check_obstacle();
+impl go_forward();
+impl stop();

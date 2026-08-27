@@ -1,0 +1,8 @@
+[project]
+name = "bts"
+version = "0.1.0"
+description = "Behavior tree remote actions server for Forester"
+requires-python = ">=3.9"
+dependencies = [
+    "forester_client_http>=0.6.1",
+]

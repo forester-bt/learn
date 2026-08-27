@@ -1,0 +1,11 @@
+
+actions:
+  - type: http
+    name: check_obstacle
+    url: "http://127.0.0.1:10001/check"
+  - type: http
+    name: go_forward
+    url: "http://127.0.0.1:10001/forward"
+  - type: http
+    name: stop
+    url: "http://127.0.0.1:10001/stop"
