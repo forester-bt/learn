@@ -20,9 +20,9 @@ f-tree --help
 
 ### Common CLI Subcommands
 
+* **Execution (`f-tree run`)**: Run a behavior tree from the file system, configured with an optional YAML run profile.
 * **Simulation (`f-tree sim`)**: Run behavior tree execution against simulated action stubs.
 * **Visualization (`f-tree vis`)**: Generate SVG/Graphviz visual diagrams of `.tree` files.
-* **Tree Validation (`f-tree check`)**: Statically validate tree syntax, types, and imports.
 
 ---
 

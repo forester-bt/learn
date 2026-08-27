@@ -27,7 +27,7 @@ The [Forester LSP](https://github.com/forester-bt/forester-lsp) provides languag
 ## CLI (`f-tree`)
 
 The `f-tree` command-line interface is the primary utility for testing and manipulating trees without writing boilerplate application code. It supports:
+* Running trees from the file system, configured with optional YAML run profiles.
 * Simulating trees with stubbed actions using YAML profiles.
 * Generating SVG visualizations of the tree structure.
-* Exporting trees to the ROS Nav2 XML format.
-* Printing built-in standard library headers (e.g., `ros::nav2`, `std::actions`).
+* Printing built-in standard library headers (e.g., `std::actions`).
